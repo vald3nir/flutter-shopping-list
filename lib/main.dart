@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shopping_list/add_new_item_screen.dart';
+import 'package:flutter_shopping_list/edit_item_screen.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Shopping List',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      home: MyHomePage(title: 'Shopping List'),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key, this.title}) : super(key: key);
+
   final String? title;
 
   @override
@@ -45,7 +49,12 @@ class MyHomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddNewItemScreen()),
+          );
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
