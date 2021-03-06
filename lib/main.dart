@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_shopping_list/add_new_item_screen.dart';
-import 'package:flutter_shopping_list/edit_item_screen.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_shopping_list/shopping_list_controller.dart';
+
+ShoppingListController shoppingListController = new ShoppingListController();
 
 void main() {
   runApp(MyApp());
@@ -22,23 +24,23 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title}) : super(key: key);
 
-  final String? title;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(this.title!),
+        title: Text(this.title),
       ),
       body: SafeArea(
         child: Container(
-          child: ListView(
-            children: <Widget>[
-              Card(
+          child: Observer(
+            builder: (_) => ListView.builder(
+              itemBuilder: (_, i) => Card(
                 child: ListTile(
-                  title: Text('One-line with leading widget'),
+                  title: Text(shoppingListController.getItem(i)),
                   trailing:
                       Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                     IconButton(
@@ -58,7 +60,8 @@ class MyHomePage extends StatelessWidget {
                   ]),
                 ),
               ),
-            ],
+              itemCount: shoppingListController.getSize(),
+            ),
           ),
         ),
       ),
@@ -72,6 +75,76 @@ class MyHomePage extends StatelessWidget {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class EditItemScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Edit Item"),
+      ),
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: '',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Done'))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AddNewItemScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Add Item"),
+      ),
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Add your new Item',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Add'))
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
