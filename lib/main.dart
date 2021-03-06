@@ -50,13 +50,17 @@ class MyHomePage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EditItemScreen()),
+                                builder: (context) => EditItemScreen(
+                                    text: shoppingListController.getItem(i),
+                                    position: i)),
                           );
                         }),
                     IconButton(
                         icon: Icon(Icons.delete),
                         tooltip: 'Delete item',
-                        onPressed: () {}),
+                        onPressed: () {
+                          shoppingListController.deleteItem(i);
+                        }),
                   ]),
                 ),
               ),
@@ -80,6 +84,14 @@ class MyHomePage extends StatelessWidget {
 }
 
 class EditItemScreen extends StatelessWidget {
+  final textEditingController = TextEditingController();
+  final String text;
+  final int position;
+
+  EditItemScreen({this.text, this.position}) {
+    textEditingController.text = text;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,8 +105,9 @@ class EditItemScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextFormField(
+                controller: textEditingController,
                 decoration: InputDecoration(
-                  labelText: '',
+                  hintText: "Item name",
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -103,6 +116,10 @@ class EditItemScreen extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () {
+                    if (textEditingController.text.isNotEmpty) {
+                      shoppingListController.editItem(
+                          textEditingController.text, position);
+                    }
                     Navigator.pop(context);
                   },
                   child: Text('Done'))
@@ -115,6 +132,8 @@ class EditItemScreen extends StatelessWidget {
 }
 
 class AddNewItemScreen extends StatelessWidget {
+  final textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,6 +147,7 @@ class AddNewItemScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextFormField(
+                controller: textEditingController,
                 decoration: InputDecoration(
                   labelText: 'Add your new Item',
                   border: OutlineInputBorder(),
@@ -138,6 +158,10 @@ class AddNewItemScreen extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () {
+                    if (textEditingController.text.isNotEmpty) {
+                      shoppingListController
+                          .addItem(textEditingController.text);
+                    }
                     Navigator.pop(context);
                   },
                   child: Text('Add'))
