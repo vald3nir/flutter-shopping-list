@@ -39,9 +39,23 @@ class MyHomePage extends StatelessWidget {
               Card(
                 child: ListTile(
                   title: Text('One-line with leading widget'),
-                  trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[Icon(Icons.edit), Icon(Icons.delete)]),
+                  trailing:
+                      Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                    IconButton(
+                        icon: Icon(Icons.edit),
+                        tooltip: 'Edit item',
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditItemScreen()),
+                          );
+                        }),
+                    IconButton(
+                        icon: Icon(Icons.delete),
+                        tooltip: 'Delete item',
+                        onPressed: () {}),
+                  ]),
                 ),
               ),
             ],
